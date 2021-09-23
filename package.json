@@ -1,33 +1,60 @@
 {
   "name": "usb-interface-ng-electron",
   "version": "0.0.0",
+  "main": "./dist/electron/main.js",
+  "private": true,
+  "build": {
+    "appId": "marco.electron-usb-interface",
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "./dist/**/*"
+    ]
+  },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng build && npm run electron",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "ng:serve": "ng serve",
+    "electron": "tsc && electron ./dist/electron/main.js",
+    "electron:watch": "npm-run-all -p ng:serve electron:serve ",
+    "electron:build:prod": "ng build --prod && tsc && electron-builder",
+    "electron:build": "ng build && tsc",
+    "electron:serve": "wait-on http-get://localhost:4200/ && tsc && electron ./dist/electron/main.js --watch",
+    "electron:rebuild": "./node_modules/.bin/electron-rebuild"
   },
-  "private": true,
   "dependencies": {
-    "@angular/animations": "~10.2.0",
-    "@angular/common": "~10.2.0",
-    "@angular/compiler": "~10.2.0",
-    "@angular/core": "~10.2.0",
-    "@angular/forms": "~10.2.0",
-    "@angular/platform-browser": "~10.2.0",
-    "@angular/platform-browser-dynamic": "~10.2.0",
-    "@angular/router": "~10.2.0",
+    "@angular/animations": "~12.2.0",
+    "@angular/cdk": "~12.2.6",
+    "@angular/common": "~12.2.0",
+    "@angular/compiler": "~12.2.0",
+    "@angular/core": "~12.2.0",
+    "@angular/forms": "~12.2.0",
+    "@angular/material": "~12.2.6",
+    "@angular/platform-browser": "~12.2.0",
+    "@angular/platform-browser-dynamic": "~12.2.0",
+    "@angular/router": "~12.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1002.0",
-    "@angular/cli": "~10.2.0",
-    "@angular/compiler-cli": "~10.2.0",
-    "@types/node": "^12.11.1",
+    "@angular-devkit/build-angular": "~12.2.6",
+    "@angular/cli": "~12.2.6",
+    "@angular/compiler-cli": "~12.2.0",
+    "@types/node": "^16.9.2",
+    "electron": "^14.0.1",
+    "electron-builder": "^22.11.7",
+    "electron-reload": "^2.0.0-alpha.1",
+    "npm-run-all": "^4.1.5",
+    "wait-on": "^6.0.0",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
     "codelyzer": "^6.0.0",
@@ -41,6 +68,6 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.0.2"
+    "typescript": "~4.3.5"
   }
 }
