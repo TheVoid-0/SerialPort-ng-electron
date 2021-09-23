@@ -1,35 +1,9 @@
 // Arquivo necessário para o vsCode carregar corretamente as configurações para cada aplicação, nesse caso o angular (src/**)
-// {
-//     "extends": "../tsconfig.json",
-//     "compilerOptions": {
-//         "rootDirs": [
-//             "./",
-//         ],
-//         "outDir": "../dist/",
-//         "module": "es2020",
-//         "types": [],
-//         "experimentalDecorators": true,
-//         "emitDecoratorMetadata": true,
-//     },
-//     "angularCompilerOptions": {
-//         "enableI18nLegacyMessageIdFormat": false,
-//         "strictInjectionParameters": true,
-//         "strictInputAccessModifiers": true,
-//         "strictTemplates": true
-//     }
-// }
-
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "paths": {
-            "~@common/*": [
-                "../@common/*"
-            ]
-        },
         "rootDirs": [
             "./",
-            "../@common"
         ],
         "outDir": "../dist/",
         "module": "es2020",
