@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
-import { InEndpoint, OutEndpoint } from 'usb';
 import { App } from './src/app';
+import { SerialService } from './src/services/serial.service';
 
 // verifica se foi passado o argumento para dar auto-reload
 const args: string[] = process.argv.slice(1);
@@ -14,8 +14,8 @@ function createWindow() {
         height: 600,
         backgroundColor: '#fff',
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true
+            nodeIntegration: true,
+            contextIsolation: false
         }
     })
 
@@ -30,22 +30,39 @@ function createWindow() {
     }
 
     var usbNgElectronApp = new App(ipcMain);
-    usbNgElectronApp.onReady.then((mainApp) => {
+    usbNgElectronApp.onReady.then(async (mainApp) => {
         console.log('app ready');
-        const SerialPort = mainApp.getSerialPort();
-        const port = new SerialPort('com3', { baudRate: 9600 }, (error) => {
-            if (error) {
-                console.log('Failed to open port: ' + error);
-            } else {
-                //Communicate with the device
-                port.write("teste\n", (err, results) => {
+
+        // TODO: Adicionar rotas para chamar os 'controllers'
+        // TODO: testar se o export new cria uma nova instância a cada import
+        // TODO: Adicionar a escolha de qual porta abrir
+
+        let serialService = new SerialService(mainWindow);
+
+        // Rota do controller externo
+        mainApp.getIpcMain().on('serial-page', (event, args) => {
+            console.log('enviando', args.data);
+            serialService.sendData(args.data);
+
+            // Rota do controller interno que será adicionado após a entrada na página
+            mainApp.getIpcMain().on('serial-page-get-ports', (event) => {
+                console.log('buscando portas...');
+
+                serialService.findPorts().then((ports) => {
+                    event.sender.send('serial-page-get-ports-ready', { data: ports });
+                })
+            });
+
+            mainApp.getIpcMain().on('serial-page-post-autoread', (event, args) => {
+                serialService.sendData(args, (error: Error | null) => {
                     if (error) {
-                        console.log('Failed to write to port: ' + error);
+                        console.log(error);
                     }
-                    console.log('enviei: teste')
+                    event.sender.send('serial-page-post-autoread-ready', { error: error, message: error ? 'success' : 'error' });
                 });
-            }
+            })
         });
+
     })
     // Abre o inspecionador.
     mainWindow.webContents.openDevTools();
