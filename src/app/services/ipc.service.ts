@@ -84,6 +84,7 @@ export class IpcService {
         for (const channel of this.listeners[page]) {
             this._ipc?.removeAllListeners(channel);
         }
+        delete this.listeners[page];
         this._ipc?.send(`${page}-closed`);
     }
 

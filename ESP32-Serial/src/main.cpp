@@ -19,6 +19,7 @@ void loop()
 
     delay(1000);
 
-    Serial.println("t😎🤣");
+    Serial.println("it23.35");
+    Serial.println("a11");
   }
 }

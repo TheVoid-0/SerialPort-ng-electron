@@ -1,46 +1,12 @@
 import { BrowserWindow } from 'electron';
-import SerialPort = require('serialport');
+import { serialProvider } from '../common/services/serial.provider'
 
-// type SerialPort = typeof import('serialport')
+// TODO: Criar as classes com as dependências no construtor e exportar elas instanciando as dependências necessárias
+// TODO: Deixar as funções do service como async
 const DEVICE_PID = 'EA60'
 export class SerialService {
 
-    private serialPort: typeof SerialPort
-    private portOpened: SerialPort | undefined;
-    constructor(window: BrowserWindow) {
-        this.serialPort = SerialPort;
-        this.setupListeners(window);
-    }
-
-    public async findPortByPID(pid: string): Promise<SerialPort.PortInfo | undefined> {
-        let ports = await this.serialPort.list();
-        return ports.find((port) => port.productId === pid);
-
-    }
-    public async findPorts() {
-        return await this.serialPort.list();
-    }
-
-    public async open(path: string, options?: SerialPort.OpenOptions): Promise<SerialPort> {
-        return new Promise<SerialPort>(async (resolve, reject) => {
-            const port: SerialPort = new SerialPort(path, options ? options : { baudRate: 115200 }, (error) => {
-                if (error) {
-                    console.log('Failed to open port: ' + error);
-                    reject(error);
-                } else {
-                    //Communicate with the device
-                    console.log('Porta aberta');
-                    resolve(port);
-                }
-            });
-        });
-    }
-
-    public setReadLineParser(port: SerialPort): SerialPort.parsers.Readline {
-        const parser = new SerialPort.parsers.Readline({ encoding: 'utf8', delimiter: '\n' });
-        port.pipe(parser)
-        return parser;
-    }
+    constructor() { }
 
     private readInfo(data: string, window: BrowserWindow) {
         switch (data[0]) {
@@ -83,11 +49,10 @@ export class SerialService {
     }
 
     public setupListeners(window: BrowserWindow) {
-        this.findPortByPID(DEVICE_PID).then(portInfo => {
+        serialProvider.findPortByPID(DEVICE_PID).then(portInfo => {
             if (portInfo) {
-                this.open(portInfo.path).then(port => {
-                    this.portOpened = port;
-                    let parser = this.setReadLineParser(port);
+                serialProvider.open(portInfo.path).then(port => {
+                    let parser = serialProvider.setReadLineParser(port);
                     parser.on('data', (data: string) => {
                         console.log('dados recebidos: ', data);
                         switch (data[0]) {
@@ -107,19 +72,17 @@ export class SerialService {
         })
     }
 
-    public sendData(data: string, callback?: Function) {
-        // TODO: Fazer o port Ready com uma promise
-
-        if (!this.portOpened) {
-            return
-        }
-        this.portOpened.setEncoding('utf-8');
-        console.log('escrevendo na serial...');
-        this.portOpened.write(data, callback ? callback.bind : (error) => { console.log('pronto...', error ? error : '') });
-
+    public findPorts() {
+        return serialProvider.findPorts();
     }
 
-    public closePort() {
-        this.portOpened?.close();
+    public sendData(data: string) {
+        return serialProvider.sendData(data);
+    }
+
+    public open(path: string) {
+        return serialProvider.open(path);
     }
 }
+
+export const serialService = new SerialService();

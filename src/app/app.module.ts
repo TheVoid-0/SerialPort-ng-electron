@@ -12,6 +12,8 @@ import { AppComponent } from './app.component';
 import { IpcService } from './services/ipc.service';
 import { FormsModule } from '@angular/forms';
 
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -24,7 +26,8 @@ import { FormsModule } from '@angular/forms';
     MatSelectModule,
     MatCheckboxModule,
     MatSlideToggleModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgxChartsModule
   ],
   providers: [IpcService],
   bootstrap: [AppComponent]
