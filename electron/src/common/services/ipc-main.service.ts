@@ -53,7 +53,8 @@ export class IpcMainService {
         for (const channel of this.listeners[page]) {
             this._ipcMain?.removeAllListeners(channel);
         }
-        this._ipcMain.removeAllListeners(page);
-        delete this.listeners[page];
+        // NÃO remover o listener da própria página, pois ele poderá ser chamado para recriar as rotas!!
+        // this._ipcMain.removeAllListeners(page);
+        // delete this.listeners[page];
     }
 }

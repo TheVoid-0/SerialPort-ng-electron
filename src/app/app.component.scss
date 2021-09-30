@@ -1,7 +1,10 @@
-main{
-    padding: 40px;
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
 }
-
 .header {
     display: flex;
     justify-content: space-between;
@@ -36,6 +39,9 @@ main{
             }
         }
     }
+}
+.led:last-of-type {
+    margin-right: 0!important;
 }
 
 .switch {
@@ -72,5 +78,87 @@ main{
             }
         }
     }
-    
+}
+
+.card {
+    background-color: white;
+    border-radius: 5px;
+    border: solid 1px #ccc;
+    padding: 20px;
+    width: 100%;
+    max-width: 1150px;
+    height: 85vh;
+    overflow: auto;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(34, 41, 47, 0.1);
+}
+
+.grafico {
+    flex: 0 0 50%;
+}
+
+.logs-content {
+    flex: 0 0 400px;
+}
+
+.btn-reload {
+    margin-left: 10px;
+}
+
+@media screen and (max-width: 1000px) {
+    .footer {
+        flex-direction: column-reverse;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .grafico,
+    .logs-content {
+        flex: 0 0 100%;
+    }
+
+    .grafico {
+        margin-top: 50px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .flex {
+        flex-direction: column;
+    }
+
+    .header {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .leds {
+        width: 45%;
+    }
+
+    .footer {
+        flex-direction: column-reverse;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(141, 141, 141);;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(99, 99, 99);
 }

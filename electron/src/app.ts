@@ -16,9 +16,11 @@ const AppModules = [
 export class App {
     private windows: BrowserWindow[];
     private appModules;
+    private cleanupFunctions: Function[] = [];
 
     constructor() {
         console.log('app constructor');
+        this.setExitCalls();
         this.windows = new Array<BrowserWindow>();
         this.appModules = [];
         for (let appModule of AppModules) {
@@ -52,6 +54,21 @@ export class App {
 
     public getMainWindow(): BrowserWindow {
         return this.windows[0];
+    }
+
+    public setExitCalls() {
+        [`exit`, `SIGINT`, `SIGUSR1`, `SIGUSR2`, `uncaughtException`, `SIGTERM`].forEach((eventType) => {
+            process.on(eventType, this.terminate.bind(null, eventType));
+        })
+    }
+
+    public onTerminate(fn: () => void) {
+        this.cleanupFunctions.push(fn);
+    }
+
+    public terminate(eventType?: string): void {
+        console.log('Terminating app ', eventType);
+        this.cleanupFunctions.forEach(fn => fn());
     }
 
 }

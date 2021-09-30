@@ -6,3 +6,15 @@ body {
     background-color: #f2f2f2;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+ngx-charts-chart {
+    div {
+        width: 100%!important;
+    }
+}
+
+.header {
+    .mat-form-field-wrapper {
+        padding-bottom: 5px;
+    }
+}

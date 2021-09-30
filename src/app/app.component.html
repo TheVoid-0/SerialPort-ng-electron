@@ -1,92 +1,58 @@
 <main>
-  <div class="header">
+  <div class="card">
+    <div class="header">
+      <div class="flex">
+        <mat-form-field appearance="fill">
+          <mat-label>Connect</mat-label>
+          <mat-select [disabled]="ports.length < 1" [value]="portSelect" (valueChange)="openPort($event)">
+            <mat-option mat-option *ngFor="let port of ports" [value]="port">{{ port.path }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button class="btn-reload" mat-stroked-button (click)="getPorts()">
+          Reload
+        </button>
+      </div>
+
+      <mat-checkbox class="example-margin" [(ngModel)]="autoReadStatus" (ngModelChange)="changeAutoReadStatus()">Auto
+        Read
+        Status</mat-checkbox>
+    </div>
+
+    <hr>
+
     <div class="flex">
-      <mat-form-field appearance="fill">
-        <mat-label>Connect</mat-label>
-        <mat-select>
-          <mat-option mat-option *ngFor="let conn of ['teste1', 'teste2']" [value]="conexao">{{ conn }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button mat-stroked-button>Refresh</button>
+      <div class="leds">
+        <div *ngFor="let ledSwitch of ledSwitches; let index = index" class="led">
+          <label>L{{index+1}}</label>
+          <div [ngClass]="ledSwitch.value ? 'active' :'' "></div>
+        </div>
+      </div>
+
+      <div class="switch">
+        <div *ngFor="let ledSwitch of ledSwitches; let index = index">
+          <label>L{{index+1}}</label>
+          <mat-slide-toggle [disabled]="ledSwitch.disabled" [checked]="ledSwitch.value" (change)="changeLedStatus($event, index)"></mat-slide-toggle>
+        </div>
+      </div>
+
     </div>
 
-    <mat-checkbox class="example-margin" [(ngModel)]="autoReadStatus">Auto Read Status</mat-checkbox>
-  </div>
+    <hr>
 
-
-  <div class="flex">
-    <div class="leds">
-      <div class="led">
-        <label>L1</label>
-        <div></div>
+    <div class="flex footer">
+      <div class="grafico">
+        <ngx-charts-line-chart [view]="view" [scheme]="colorScheme" [legend]="legend" [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel" [timeline]="timeline" [results]="multi">
+        </ngx-charts-line-chart>
       </div>
-      <div class="led">
-        <label>L2</label>
-        <div class="active"></div>
-      </div>
-      <div class="led">
-        <label>L3</label>
-        <div></div>
-      </div>
-    </div>
-
-    <div class="switch">
-      <div>
-        <label>L1</label>
-        <mat-slide-toggle [checked]="switchL1"></mat-slide-toggle>
-      </div>
-      <div>
-        <label>L2</label>
-        <mat-slide-toggle [checked]="switchL2"></mat-slide-toggle>
-      </div>
-      <div>
-        <label>L3</label>
-        <mat-slide-toggle [checked]="switchL3"></mat-slide-toggle>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="flex footer">
-    <div class="grafio">
-      <ngx-charts-line-chart
-        [view]="view"
-        [scheme]="colorScheme"
-        [legend]="legend"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxis]="xAxis"
-        [yAxis]="yAxis"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        [timeline]="timeline"
-        [results]="multi"
-        >
-      </ngx-charts-line-chart>
-    </div>
-    <div class="logs-content">
-      <label>Log Status</label>
-      <div class="logs">
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
-        <small>Log 1</small>
+      <div class="logs-content">
+        <label>Log Status</label>
+        <div class="logs">
+          <small *ngFor="let log of getLogs">{{log}}</small>
+        </div>
       </div>
     </div>
   </div>
 
-  <button mat-button (click)="sendMessage()">TESTE</button>
 </main>

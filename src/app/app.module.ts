@@ -6,6 +6,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatIconModule} from '@angular/material/icon'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,7 +28,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatCheckboxModule,
     MatSlideToggleModule,
     BrowserAnimationsModule,
-    NgxChartsModule
+    NgxChartsModule,
+    MatIconModule
   ],
   providers: [IpcService],
   bootstrap: [AppComponent]

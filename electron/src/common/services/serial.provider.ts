@@ -21,6 +21,9 @@ export class SerialProvider {
     }
 
     public async open(path: string, options?: SerialPort.OpenOptions): Promise<SerialPort> {
+        if (this.portOpened?.path === path) {
+            return Promise.resolve(this.portOpened);
+        }
         return new Promise<SerialPort>((resolve, reject) => {
             const port: SerialPort = new SerialPort(path, options ? options : { baudRate: 115200 }, (error) => {
                 if (error) {
@@ -30,7 +33,6 @@ export class SerialProvider {
                     console.log('Porta aberta');
                     this.portOpened = port;
                     this.portReadyBSubject.next(this.portOpened);
-                    this.portReadyBSubject.complete();
                     resolve(this.portOpened);
                 }
             });
@@ -45,11 +47,10 @@ export class SerialProvider {
 
     public sendData(data: string, callback?: Function): Observable<void> {
         return new Observable<void>(subscriber => {
-
             this.isPortReady().subscribe(port => {
                 if (!port) return;
 
-                port.setEncoding('utf-8');
+                // port.setEncoding('utf-8');
                 console.log('escrevendo na serial...');
 
                 port.write(data, (error) => {

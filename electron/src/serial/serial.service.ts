@@ -1,4 +1,5 @@
 import { BrowserWindow } from 'electron';
+import { usbNgElectronApp } from '../app';
 import { serialProvider } from '../common/services/serial.provider'
 
 // TODO: Criar as classes com as dependências no construtor e exportar elas instanciando as dependências necessárias
@@ -80,8 +81,17 @@ export class SerialService {
         return serialProvider.sendData(data);
     }
 
+    public sendCommand(data: string) {
+        return serialProvider.sendData(`c${data}\n`);
+    }
+
     public open(path: string) {
+        usbNgElectronApp.onTerminate(this.cleanup);
         return serialProvider.open(path);
+    }
+
+    private cleanup() {
+        serialProvider.closePort();
     }
 }
 
