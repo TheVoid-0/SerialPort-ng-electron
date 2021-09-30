@@ -1,27 +1,24 @@
 # UsbInterfaceNgElectron
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.0.
 
-## Development server
+## COMANDOS - ENVIO
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Lista de comandos que são enviados ao MC 
 
-## Code scaffolding
+-c[led][bool]\n - [bool]= 0 ou 1, controla o [led = 1,2,3]. Ex: 'c11\n'
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+-ca[bool]\n - [bool]= 0 ou 1, controla se o MC deve enviar dados automaticamente ou não. Ex: 'ca1\n'
 
-## Build
+OBS: A quebra de linha '\n' é o delimitador dos comandos
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## COMANDOS - RECEBIMENTO
 
-## Running unit tests
+-a[led][bool] - [bool]= 0 ou 1, controla o [led = 1,2,3] enviando uma resposta ao programa de como o led está. Ex: 'a10\n'
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+-at[n] - [n = qualquer número em string] informa ao programa a temperatura;
 
-## Running end-to-end tests
+-i[led][bool] - [bool]= 0 ou 1, controla o [led = 1,2,3] informa o estado do led. Ex: 'i31\n'
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+-it[n] - [n = qualquer número em string] informa ao programa a temperatura; Ex: 'i20.30'
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+A ou I? O 'a' seria para diferenciar um  comando que foi enviado ao programa em decorrência de uma requisição prévia, ou seja, o programa solicitou aquela informação, já o 'i' seria para identificar que essa informação está sendo enviada por decisão do MC sem o programa ter necessariamente solicitado pela informação
